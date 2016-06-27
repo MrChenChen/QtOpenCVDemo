@@ -149,6 +149,10 @@
     <ClInclude Include="Stopwatch.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="temp_image.bmp" />
+    <Image Include="vision.bmp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
