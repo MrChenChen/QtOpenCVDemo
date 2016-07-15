@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="D:\1_0090_0.bmp" />
+    <Image Include="D:\ts.bmp" />
     <Image Include="temp_image.bmp" />
     <Image Include="vision.bmp" />
   </ItemGroup>
