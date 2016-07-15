@@ -20,7 +20,7 @@ MyWidget::MyWidget(QWidget* parent) :QWidget(parent)
 
 void MyWidget::SetUpUI()
 {
-	setFixedSize(900, 600);
+	setFixedSize(870, 600);
 
 
 	AddButton = [&](QString caption, std::function<void()> _fun)
@@ -29,7 +29,7 @@ void MyWidget::SetUpUI()
 
 		connect(button, &QPushButton::clicked, this, _fun);
 
-		button->setGeometry((m_ButtonCount % 8) * 100 + 10, int(m_ButtonCount / 8) * 40 + 20, 80, 30);
+		button->setGeometry((m_ButtonCount % 8) * 100 + 40, int(m_ButtonCount / 8) * 50 + 20, 80, 30);
 
 		m_ButtonCount++;
 
@@ -38,8 +38,10 @@ void MyWidget::SetUpUI()
 
 }
 
+
 void MyWidget::InitConnections()
 {
+
 
 	AddButton("加载图片", []
 	{
@@ -50,6 +52,7 @@ void MyWidget::InitConnections()
 		namedWindow("LoadImage", CV_WINDOW_NORMAL);
 
 	});
+
 
 	AddButton("二值化", []
 	{
@@ -180,9 +183,16 @@ void MyWidget::InitConnections()
 
 		Mat imageROI = img(Rect(500, 120, girl.cols, girl.rows));
 
-		addWeighted(img(Rect(500, 120, girl.cols, girl.rows)), 0, girl, 1, 0.1, imageROI);
+
+		//dst = img1[x]*alpha + img2[x]*beta + gama       //输出数组深度是 CV_32S 时不适合 addWeigted
+		//addWeighted(img(Rect(500, 120, girl.cols, girl.rows)), 0, girl, 1, 0.1, imageROI);
+
+		girl.copyTo(imageROI);
+
 
 		imshow("After", img);
+
+
 	});
 
 
@@ -202,7 +212,7 @@ void MyWidget::InitConnections()
 
 		Mat rndcolor(300, 300, CV_8UC3);
 
-		for (size_t i = 0; i < rndcolor.rows; i++)
+		/*for (size_t i = 0; i < rndcolor.rows; i++)
 		{
 			for (size_t j = 0; j < rndcolor.cols; j++)
 			{
@@ -212,10 +222,12 @@ void MyWidget::InitConnections()
 				t[1] = qrand() % 255;
 				t[2] = qrand() % 255;
 			}
-		}
+		}*/
+
+		randu(rndcolor, Scalar(0, 0, 0), Scalar(255, 255, 255));
+
 
 		imshow("rndcolor", rndcolor);
-
 
 
 		Mat rndgray(300, 300, CV_8UC1);
@@ -234,6 +246,89 @@ void MyWidget::InitConnections()
 
 	});
 
+
+	AddButton("通道分离", []
+	{
+		Mat src = imread("ts.bmp", 1);
+
+		imshow("Source", src);
+
+		vector<Mat> channels;
+
+		split(src, channels);
+
+		/*int len = src.cols*src.rows * 3;
+
+		Mat c1;
+		Mat c2;
+		Mat c3;
+
+		uchar* ptr = src.data;
+
+		for (size_t i = 0; i < len; i += 3)
+		{
+			c1.push_back<uchar>(ptr[i]);
+			c2.push_back<uchar>(ptr[i + 1]);
+			c3.push_back<uchar>(ptr[i + 2]);
+		}
+
+		channels.push_back(c1);
+		channels.push_back(c2);
+		channels.push_back(c3);*/
+
+
+		imshow("B", channels[0]);
+
+		imshow("G", channels[1]);
+
+		imshow("R", channels[2]);
+
+	});
+
+
+	AddButton("通道和并", []
+	{
+		Mat src = imread("ts.bmp", 1);
+
+		vector<Mat> channels;
+
+		split(src, channels);
+
+		imshow("B", channels[0]);
+
+		imshow("G", channels[1]);
+
+		imshow("R", channels[2]);
+
+		Mat dst;
+
+
+		//merge(channels, dst);
+
+
+		Mat temp = channels[0];
+
+		cvtColor(temp, temp, COLOR_GRAY2BGR);
+
+		uchar* ptr = temp.data;
+
+		int len = channels[0].cols*channels[1].rows * 3;
+
+		int j = 0;
+
+		for (size_t i = 0; i < len; i += 3)
+		{
+			ptr[i] = channels[0].data[j];
+			ptr[i + 1] = channels[1].data[j];
+			ptr[i + 2] = channels[2].data[j];
+			j++;
+		}
+
+
+
+		imshow("After Merge", temp);
+
+	});
 
 
 }
