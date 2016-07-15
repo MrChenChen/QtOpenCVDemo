@@ -331,4 +331,134 @@ void MyWidget::InitConnections()
 	});
 
 
+	AddButton("亮度", []
+	{
+		Mat src = imread("ts.bmp", 1);
+
+		imshow("Before", src);
+
+		for (size_t i = 0; i < src.rows; i++)
+		{
+			for (size_t j = 0; j < src.cols; j++)
+			{
+				src.at<Vec3b>(i, j)[0] = qMax(qMin(src.at<Vec3b>(i, j)[0] - 30, 255), 0);
+				src.at<Vec3b>(i, j)[1] = qMax(qMin(src.at<Vec3b>(i, j)[1] - 30, 255), 0);
+				src.at<Vec3b>(i, j)[2] = qMax(qMin(src.at<Vec3b>(i, j)[2] - 30, 255), 0);
+			}
+		}
+
+		imshow("After", src);
+
+	});
+
+
+	AddButton("对比度", []
+	{
+		Mat src = imread("ts.bmp", 1);
+
+		imshow("Before", src);
+
+		for (size_t i = 0; i < src.rows; i++)
+		{
+			for (size_t j = 0; j < src.cols; j++)
+			{
+				src.at<Vec3b>(i, j)[0] = qMax(qMin(uchar(src.at<Vec3b>(i, j)[0] * 2), (uchar)255), (uchar)0);
+				src.at<Vec3b>(i, j)[1] = qMax(qMin(uchar(src.at<Vec3b>(i, j)[1] * 2), (uchar)255), (uchar)0);
+				src.at<Vec3b>(i, j)[2] = qMax(qMin(uchar(src.at<Vec3b>(i, j)[2] * 2), (uchar)255), (uchar)0);
+			}
+		}
+
+		imshow("After", src);
+
+	});
+
+
+	AddButton("扩充图像", []
+	{
+		Mat src = imread("ts.bmp", 1);
+
+		imshow("Before", src);
+
+		Mat dst;
+
+		copyMakeBorder(src, dst, 10, 30, 20, 40, BorderTypes::BORDER_CONSTANT, Scalar(0, 0, 255));
+
+		imshow("After", dst);
+	});
+
+
+	AddButton("傅里叶", []
+	{
+		Mat src = imread("ts.bmp", 0);
+
+		imshow("Source", src);
+
+		//扩大尺寸
+		int m = getOptimalDFTSize(src.rows);
+
+		int n = getOptimalDFTSize(src.cols);
+
+		Mat padd;
+
+		copyMakeBorder(src, padd, 0, m - src.rows, 0, n - src.cols, BORDER_CONSTANT, Scalar::all(0));
+
+		//为结果分配空间 两个Mat数组
+		Mat planes[] = { Mat_<float>(padd), Mat::zeros(padd.size(),CV_32F) };
+
+		Mat complexI;
+
+		merge(planes, 2, complexI);
+
+		//进行傅里叶变换
+		dft(complexI, complexI);
+
+		//将傅里叶变换的结果分解通道
+		split(complexI, planes);
+
+		//将复数转化为振幅
+		magnitude(planes[0], planes[0], planes[1]);
+
+		Mat magnitudeImage = planes[0];
+
+		//进行对数尺度缩放
+
+		magnitudeImage += Scalar::all(1);
+
+		log(magnitudeImage, magnitudeImage);
+
+		//重新分布图像象限
+		magnitudeImage = magnitudeImage(Rect(0, 0, magnitudeImage.cols & -2, magnitudeImage.rows & -2));
+
+		int cx = magnitudeImage.cols / 2;
+
+		int cy = magnitudeImage.rows / 2;
+
+		Mat q0(magnitudeImage, Rect(0, 0, cx, cy)); //左上
+
+		Mat q1(magnitudeImage, Rect(cx, 0, cx, cy)); //右上
+
+		Mat q2(magnitudeImage, Rect(0, cy, cx, cy)); //左下
+
+		Mat q3(magnitudeImage, Rect(cx, cy, cx, cy)); //右下
+
+		Mat temp; //交换左上 和 右下
+
+		q0.copyTo(temp);
+
+		q3.copyTo(q0);
+
+		q1.copyTo(temp);  //交换右上 和 左下
+
+		q2.copyTo(q1);
+
+		temp.copyTo(q2);
+
+		//归一化
+
+		normalize(magnitudeImage, magnitudeImage, 0, 1, NORM_MINMAX);
+
+		imshow("After DFT", magnitudeImage);
+
+	});
+
 }
