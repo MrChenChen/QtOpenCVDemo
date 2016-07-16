@@ -461,4 +461,32 @@ void MyWidget::InitConnections()
 
 	});
 
+
+	AddButton("Make XML", []
+	{
+		FileStorage file("D:\\v.xml", FileStorage::WRITE);
+
+
+
+		Mat img = imread("ts.bmp");
+
+		file << "ts" << img;
+
+		file.release();
+	});
+
+
+	AddButton("Read XML", []
+	{
+		FileStorage file("D:\\v.xml", FileStorage::READ);
+
+		Mat img;
+
+		file["ts"] >> img;
+
+		imshow("ts", img);
+
+	});
+
+
 }
