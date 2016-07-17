@@ -67,58 +67,6 @@ void MyWidget::InitConnections()
 	});
 
 
-	AddButton("¸¯Ê´", []
-	{
-		Mat img = imread("1_0090_0.bmp", 0);
-
-		imshow("Before", img);
-
-		Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));
-
-		erode(img, img, element);
-
-		imshow("After", img);
-
-	});
-
-
-	AddButton("Ä£ºý/ÂË²¨", []
-	{
-		Mat img = imread("1_0090_0.bmp", 0);
-
-		Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));
-
-		blur(img, img, Size(7, 7));
-
-		imshow("After", img);
-
-		threshold(img, img, 200, 255, CV_THRESH_BINARY);
-
-		imshow("Thresold Blur", img);
-
-	});
-
-
-	AddButton("Canny", []
-	{
-
-		Mat img = imread("1_0090_0.bmp", 0);
-
-		threshold(img, img, 200, 255, CV_THRESH_BINARY);
-
-		imshow("Before Canny", img);
-
-		Mat des;
-
-		des.create(img.size(), img.type());
-
-		Canny(img, des, 3, 9, 3);
-
-		imshow("After Canny", des);
-
-
-	});
-
 
 	AddButton("²¥·ÅÊÓÆµ", []
 	{
@@ -466,11 +414,19 @@ void MyWidget::InitConnections()
 	{
 		FileStorage file("D:\\v.xml", FileStorage::WRITE);
 
+		std::vector<Point> vec;
+
+		vec.push_back(Point(1, 2));
+		vec.push_back(Point(3, 4));
+		vec.push_back(Point(5, 6));
 
 
-		Mat img = imread("ts.bmp");
+		//Mat img = imread("ts.bmp");
 
-		file << "ts" << img;
+		file << "ts" << 1 << "hah" << "[" << vec << "]";
+
+
+
 
 		file.release();
 	});
@@ -488,5 +444,337 @@ void MyWidget::InitConnections()
 
 	});
 
+
+	AddButton("·½¿òÂË²¨", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		imshow("Before", img);
+
+		boxFilter(img, img, -1, Size(5, 5), Point(-1, -1));
+
+		imshow("After", img);
+
+		threshold(img, img, 200, 255, CV_THRESH_BINARY);
+
+		imshow("Thresold Blur", img);
+
+	});
+
+
+	AddButton("¾ùÖµÂË²¨", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));
+
+		blur(img, img, Size(7, 7));
+
+		imshow("After", img);
+
+		threshold(img, img, 200, 255, CV_THRESH_BINARY);
+
+		imshow("Thresold Blur", img);
+
+	});
+
+
+
+	AddButton("ÖÐÖµÂË²¨", []
+	{
+		Mat img = imread("ts.bmp", 0);
+
+		imshow("Before", img);
+
+
+		medianBlur(img, img, 7);
+
+		imshow("After", img);
+
+		threshold(img, img, 200, 255, CV_THRESH_BINARY);
+
+		imshow("Thresold Blur", img);
+
+	});
+
+
+	AddButton("Ë«±ßÂË²¨", []
+	{
+		Mat img = imread("ts.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat out;
+
+		bilateralFilter(img, out, 9, 9 * 2, 9 / 2);
+
+		imshow("After", out);
+
+		threshold(out, out, 200, 255, CV_THRESH_BINARY);
+
+		imshow("Thresold Blur", out);
+
+	});
+
+
+	AddButton("¸¯Ê´", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));
+
+		erode(img, img, element);
+
+		imshow("After", img);
+
+		threshold(img, img, 200, 255, CV_THRESH_BINARY);
+
+		imshow("Thresold erode", img);
+	});
+
+
+	AddButton("ÅòÕÍ", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));
+
+		dilate(img, img, element);
+
+		imshow("After", img);
+
+		threshold(img, img, 200, 255, CV_THRESH_BINARY);
+
+		imshow("Thresold dilate", img);
+
+	});
+
+
+	AddButton("¿ªÔËËã", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat temp;
+
+		Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));
+
+		dilate(img, temp, element);
+
+		erode(temp, temp, element);
+
+		imshow("After", temp);
+
+	});
+
+
+	AddButton("±ÕÔËËã", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat temp;
+
+		Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));
+
+		erode(img, temp, element);
+
+		dilate(temp, temp, element);
+
+		imshow("After", temp);
+
+	});
+
+
+	AddButton("ÐÎÌ¬Ñ§ÌÝ¶È", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat element = getStructuringElement(MORPH_RECT, Size(25, 25));
+
+		morphologyEx(img, img, MORPH_GRADIENT, element);
+
+		imshow("After", img);
+
+	});
+
+
+	AddButton("¶¥Ã±", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat element = getStructuringElement(MORPH_RECT, Size(25, 25));
+
+		morphologyEx(img, img, MORPH_TOPHAT, element);
+
+		imshow("After", img);
+
+	});
+
+
+	AddButton("ºÚÃ±", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat element = getStructuringElement(MORPH_RECT, Size(25, 25));
+
+		morphologyEx(img, img, MORPH_BLACKHAT, element);
+
+		imshow("After", img);
+
+	});
+
+
+	AddButton("FloodFill", []
+	{
+		Mat img = imread("1_0090_0.bmp", 1);
+
+		Mat mask(img.rows + 2, img.cols + 2, CV_8U, Scalar::all(0));
+
+
+		floodFill(img, mask, Point(300, 100), Scalar(0, 0, 255), 0, 0, 0);
+
+		imshow("After", img);
+	});
+
+
+	AddButton("Ëõ·Å", []
+	{
+		Mat img = imread("ts.bmp", 1);
+
+		imshow("Before", img);
+
+		Mat dst;
+
+		double scale = 2;
+
+		//cv::resize(img, dst, Size(round(img.cols*scale), round(img.rows*scale)));
+
+		cv::resize(img, dst, Size(), 2, 2, INTER_CUBIC);
+
+		imshow("After", dst);
+
+	});
+
+
+	AddButton("×Ô¶¯ãÐÖµ", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		adaptiveThreshold(img, img, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 3, 5);
+
+		imshow("After", img);
+	});
+
+
+	AddButton("Canny", []
+	{
+
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		blur(img, img, Size(10, 10));
+
+		threshold(img, img, 200, 255, CV_THRESH_BINARY);
+
+		imshow("Before Canny", img);
+
+		Mat des;
+
+		des.create(img.size(), img.type());
+
+		Canny(img, des, 3, 9, 3);
+
+		imshow("After Canny", des);
+
+	});
+
+
+	AddButton("Sobel", []
+	{
+
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		blur(img, img, Size(10, 10));
+
+		threshold(img, img, 200, 255, CV_THRESH_BINARY);
+
+		imshow("Before Canny", img);
+
+		Mat des;
+
+		des.create(img.size(), img.type());
+
+		Mat img_x, img_y, abs_img_x, abs_img_y, dst;
+
+		Sobel(img, img_x, img.depth(), 1, 0);
+
+		convertScaleAbs(img_x, abs_img_x);
+
+		Sobel(img, img_y, img.depth(), 0, 1);
+
+		convertScaleAbs(img_x, abs_img_x);
+
+		addWeighted(img_x, 0.5, img_y, 0.5, 0, dst);
+
+		imshow("After Sobel", dst);
+
+	});
+
+
+	AddButton("Laplacian", []
+	{
+		Mat img = imread("ts.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat dst;
+
+		Laplacian(img, dst, img.depth());
+
+		imshow("After Laplacian", dst);
+
+		imshow("After Laplacian", img - dst);
+
+	});
+
+
+	AddButton("»ô·ò±ä»»", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		blur(img, img, Size(3, 3));
+
+		threshold(img, img, 200, 255, CV_THRESH_BINARY);
+
+		imshow("Before Canny", img);
+
+		Mat dst;
+
+		dst.create(img.size(), img.type());
+
+		Canny(img, dst, 3, 9, 3);
+
+		vector<Vec2f> lines;
+
+		HoughLines(dst, lines, 1, CV_PI / 180, 150);
+
+ 
+
+
+	});
 
 }

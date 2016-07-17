@@ -8,6 +8,8 @@
 
 #include "Util.h"
 
+#include <vector>
+
 using namespace cv;
 
 using namespace std;
