@@ -829,4 +829,56 @@ void MyWidget::InitConnections()
 
 	});
 
+
+	AddButton("≤È’“¬÷¿™", []
+	{
+		Mat img = imread("vision.bmp", 0)(Rect(339, 279, 314, 315));
+
+		imshow("Before", img);
+
+		Mat dst = img.clone();
+
+		//blur(img, img, Size(5, 5));
+
+		threshold(img, img, 90, 255, THRESH_BINARY_INV);
+
+		//imshow("Thre", img);
+
+		vector<Mat> lines;
+
+		findContours(img, lines, RETR_CCOMP, CHAIN_APPROX_NONE);
+
+
+		vector<Mat> lines_copy;
+
+		vector<Rect> lines_rect;
+
+		for each (auto item in lines)
+		{
+			auto t_rect = boundingRect(item);
+
+			auto area = t_rect.area();
+
+			if (area > 50 * 50 && area < 120 * 120)
+			{
+				lines_copy.push_back(item);
+
+				t_rect = Rect(t_rect.x - 5, t_rect.y - 5, t_rect.width + 8, t_rect.height + 8);
+
+				lines_rect.push_back(t_rect);
+			}
+		}
+
+		cvtColor(dst, dst, CV_GRAY2BGR);
+
+		for each (auto item in lines_rect)
+		{
+			rectangle(dst, item, Scalar(0, 255, 0), 2);
+		}
+
+
+		imshow("After", dst);
+
+	});
+
 }

@@ -8,6 +8,8 @@
 
 #include "Util.h"
 
+#include "Stopwatch.h"
+
 #include <vector>
 
 using namespace cv;
