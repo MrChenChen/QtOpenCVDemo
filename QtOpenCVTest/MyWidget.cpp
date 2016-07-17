@@ -752,7 +752,7 @@ void MyWidget::InitConnections()
 	});
 
 
-	AddButton("ªÙ∑Ú±‰ªª", []
+	AddButton("ªÙ∑Ú÷±œﬂ", []
 	{
 		Mat img = imread("1_0090_0.bmp", 0);
 
@@ -768,12 +768,64 @@ void MyWidget::InitConnections()
 
 		Canny(img, dst, 3, 9, 3);
 
-		vector<Vec2f> lines;
+		vector<Vec4i> lines;
 
-		HoughLines(dst, lines, 1, CV_PI / 180, 150);
+		HoughLinesP(dst, lines, 1, CV_PI / 180, 50);
 
- 
+		cvtColor(dst, dst, CV_GRAY2BGR);
 
+		for (size_t i = 0; i < lines.size(); i++)
+		{
+			auto l = lines[i];
+
+			line(dst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0, 0, 255));
+
+		}
+
+		imshow("Result", dst);
+
+	});
+
+
+	AddButton("ªÙ∑Ú‘≤", []
+	{
+		Mat img = imread("vision.bmp", 0);
+
+		GaussianBlur(img, img, Size(3, 3), 2, 2);
+
+		threshold(img, img, 145, 255, THRESH_BINARY);
+
+		vector<Vec3f> lines;
+
+		HoughCircles(img, lines, HOUGH_GRADIENT, 1.5, 10, 100, 100);
+
+		cvtColor(img, img, CV_GRAY2BGR);
+
+		for (size_t i = 0; i < lines.size(); i++)
+		{
+			Point center(lines[i][0], lines[i][1]);
+
+			int radius = lines[i][2];
+
+			circle(img, center, radius, Scalar(0, 0, 255));
+		}
+
+		imshow("Result", img);
+
+	});
+
+
+	AddButton("æ˘∫‚ªØ", []
+	{
+		Mat img = imread("ts.bmp", 0);
+
+		imshow("Before", img);
+
+		Mat dst;
+
+		equalizeHist(img, dst);
+
+		imshow("After", dst);
 
 	});
 
