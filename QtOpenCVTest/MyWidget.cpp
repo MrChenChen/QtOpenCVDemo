@@ -42,6 +42,8 @@ void MyWidget::SetUpUI()
 void MyWidget::InitConnections()
 {
 
+#if 0
+
 
 	AddButton("加载图片", []
 	{
@@ -1105,7 +1107,6 @@ void MyWidget::InitConnections()
 	});
 
 
-
 	AddButton("拟合椭圆", []
 	{
 		Mat img(400, 600, CV_8U, Scalar(0));
@@ -1143,6 +1144,145 @@ void MyWidget::InitConnections()
 		}
 
 		imshow("", img);
+
+	});
+
+
+	AddButton("矩的计算", []
+	{
+		Mat img = imread("ts.bmp", 0);
+
+		auto re = moments(img);
+
+	});
+
+
+	AddButton("轮廓面积", []
+	{
+		Mat img(100, 200, CV_8U, Scalar::all(0));
+
+		img.at<uchar>(30, 60) = 255;
+		img.at<uchar>(60, 60) = 255;
+		img.at<uchar>(60, 90) = 255;
+		img.at<uchar>(90, 30) = 255;
+
+		vector<Point> points = { {30,60},{60,60},{60,90},{90,30} };
+
+		qDebug() << contourArea(points);
+
+	});
+
+
+
+	AddButton("轮廓长度", []
+	{
+		Mat img(100, 200, CV_8U, Scalar::all(0));
+
+		img.at<uchar>(30, 60) = 255;
+		img.at<uchar>(60, 60) = 255;
+		img.at<uchar>(60, 90) = 255;
+		img.at<uchar>(90, 30) = 255;
+
+		vector<Point> points = { {30,60},{60,60},{60,90},{90,30} };
+
+		qDebug() << arcLength(points, true);
+
+	});
+
+#endif
+
+
+	AddButton("直方图", []
+	{
+		Mat img = imread("ts.bmp", 1);
+
+		Mat dstHist_r, dstHist_g, dstHist_b;
+
+
+		int dims = 1;
+
+		float hranges[] = { 0,255 };
+
+		const float * ranges[] = { hranges };
+
+		int size = 256;
+
+
+
+		int channels = 0;
+
+		calcHist(&img, 1, &channels, Mat(), dstHist_b, dims, &size, ranges);
+
+
+		channels = 1;
+
+		calcHist(&img, 1, &channels, Mat(), dstHist_g, dims, &size, ranges);
+
+
+		channels = 2;
+
+		calcHist(&img, 1, &channels, Mat(), dstHist_r, dims, &size, ranges);
+
+
+		double max_r;
+
+		double max_g;
+
+		double max_b;
+
+		minMaxLoc(dstHist_b, 0, &max_r);
+		minMaxLoc(dstHist_b, 0, &max_g);
+		minMaxLoc(dstHist_b, 0, &max_b);
+
+		int max = qMax(max_b, qMax(max_g, max_r));
+
+		Mat dst(max / 10 + 100, 255 * 6, CV_8UC3, Scalar::all(0));
+
+
+		for (size_t i = 0; i < 255; i++)
+		{
+			dst.at<Vec3b>(dstHist_r.at<float>(i) / 10, 2 * (i + 1) - 1) = Vec3b(0, 0, 255);
+
+			dst.at<Vec3b>(dstHist_g.at<float>(i) / 10, 2 * (i + 1) - 1 + 255 * 2) = Vec3b(0, 255, 0);
+
+			dst.at<Vec3b>(dstHist_b.at<float>(i) / 10, 2 * (i + 1) - 1 + 255 * 4) = Vec3b(255, 0, 0);
+		}
+
+		flip(dst, dst, 0);
+
+		imshow("R G B", dst);
+
+	});
+
+
+	AddButton("直方比较", []
+	{
+		Mat m1 = imread("ts.bmp", 0);
+
+		int dims = 1;
+
+		float hranges[] = { 0,255 };
+
+		const float * ranges[] = { hranges };
+
+		int size = 256;
+
+		int channels = 0;
+
+		Mat his1;
+
+		calcHist(&m1, 1, &channels, Mat(), his1, dims, &size, ranges);
+
+
+		Mat m2 = imread("D:\\ts.bmp", 0);
+
+		Mat his2;
+
+		calcHist(&m2, 1, &channels, Mat(), his2, dims, &size, ranges);
+
+		double r = compareHist(his1, his2, HistCompMethods::HISTCMP_CHISQR);
+
+		MessageBox(0, LPCWSTR(QString("%1").arg(r).unicode()), L"", 0);
 
 	});
 
