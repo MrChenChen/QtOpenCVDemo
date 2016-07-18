@@ -20,7 +20,7 @@ MyWidget::MyWidget(QWidget* parent) :QWidget(parent)
 
 void MyWidget::SetUpUI()
 {
-	setFixedSize(870, 600);
+	setFixedSize(860, 600);
 
 
 	AddButton = [&](QString caption, std::function<void()> _fun)
@@ -888,6 +888,7 @@ void MyWidget::InitConnections()
 
 		RNG & rng = theRNG();
 
+
 		int count = rng.next() % 100 + 3;
 
 		vector<Point> points;
@@ -923,8 +924,225 @@ void MyWidget::InitConnections()
 		line(img, points[hull[hull.size() - 1]], points[hull[0]], Scalar(0, 255, 0));
 
 
-		imshow("", img);
+		imshow(QString("%1").arg(count).toStdString(), img);
 
+
+	});
+
+
+	AddButton("外接矩形", []
+	{
+		Mat img(400, 600, CV_8U, Scalar(0));
+
+		RNG & rng = theRNG();
+
+
+		int count = rng.next() % 100 + 3;
+
+		vector<Point> points;
+
+		for (size_t i = 0; i < count; i++)
+		{
+			Point p;
+
+			p.x = rng.uniform(img.cols / 4, img.cols / 4 * 3);
+			p.y = rng.uniform(img.rows / 4, img.rows / 4 * 3);
+
+			points.push_back(p);
+		}
+
+		cvtColor(img, img, CV_GRAY2BGR);
+
+		for each (auto item in points)
+		{
+			circle(img, item, 1, Scalar(0, 0, 255));
+		}
+
+		///
+
+		auto rect = boundingRect(points);
+
+		rectangle(img, rect, Scalar(0, 255, 0));
+
+		imshow(QString("%1").arg(count).toStdString(), img);
+
+	});
+
+
+	AddButton("外接旋转矩形", []
+	{
+		Mat img(400, 600, CV_8U, Scalar(0));
+
+		RNG & rng = theRNG();
+
+
+		int count = rng.next() % 100 + 3;
+
+		vector<Point> points;
+
+		for (size_t i = 0; i < count; i++)
+		{
+			Point p;
+
+			p.x = rng.uniform(img.cols / 4, img.cols / 4 * 3);
+			p.y = rng.uniform(img.rows / 4, img.rows / 4 * 3);
+
+			points.push_back(p);
+		}
+
+		cvtColor(img, img, CV_GRAY2BGR);
+
+		for each (auto item in points)
+		{
+			circle(img, item, 1, Scalar(0, 0, 255));
+		}
+
+		///
+
+		Point2f rect[4];
+
+		minAreaRect(points).points(rect);
+
+		for (size_t i = 0; i < 4; i++)
+		{
+			line(img, rect[i], rect[(i + 1) % 4], Scalar(0, 255, 0), 1, LINE_AA);
+		}
+
+
+		imshow(QString("%1").arg(count).toStdString(), img);
+
+	});
+
+
+	AddButton("外接圆形", []
+	{
+		Mat img(400, 600, CV_8U, Scalar(0));
+
+		RNG & rng = theRNG();
+
+
+		int count = rng.next() % 100 + 3;
+
+		vector<Point> points;
+
+		for (size_t i = 0; i < count; i++)
+		{
+			Point p;
+
+			p.x = rng.uniform(img.cols / 4, img.cols / 4 * 3);
+			p.y = rng.uniform(img.rows / 4, img.rows / 4 * 3);
+
+			points.push_back(p);
+		}
+
+		cvtColor(img, img, CV_GRAY2BGR);
+
+		for each (auto item in points)
+		{
+			circle(img, item, 1, Scalar(0, 0, 255));
+		}
+
+		///
+
+		Point2f center;
+
+		float radius;
+
+		minEnclosingCircle(points, center, radius);
+
+		circle(img, center, radius, Scalar(0, 255, 0));
+
+		imshow(QString("%1").arg(count).toStdString(), img);
+
+	});
+
+
+	AddButton("外接三角", []
+	{
+		Mat img(400, 600, CV_8U, Scalar(0));
+
+		RNG & rng = theRNG();
+
+
+		int count = rng.next() % 100 + 3;
+
+		vector<Point> points;
+
+		for (size_t i = 0; i < count; i++)
+		{
+			Point p;
+
+			p.x = rng.uniform(img.cols / 4, img.cols / 4 * 3);
+			p.y = rng.uniform(img.rows / 4, img.rows / 4 * 3);
+
+			points.push_back(p);
+		}
+
+		cvtColor(img, img, CV_GRAY2BGR);
+
+		for each (auto item in points)
+		{
+			circle(img, item, 1, Scalar(0, 0, 255));
+		}
+
+		///
+
+		vector<Point2f> center;
+
+		float radius;
+
+		minEnclosingTriangle(points, center);
+
+
+		for (size_t i = 0; i < center.size(); i++)
+		{
+			line(img, center[i], center[(i + 1) % center.size()], Scalar(0, 255, 0), 1, LINE_AA);
+		}
+
+
+		imshow(QString("%1").arg(count).toStdString(), img);
+
+	});
+
+
+
+	AddButton("拟合椭圆", []
+	{
+		Mat img(400, 600, CV_8U, Scalar(0));
+
+		RNG & rng = theRNG();
+
+
+		vector<Point> points;
+
+		for (size_t i = 0; i < 6; i++)
+		{
+			Point p;
+
+			p.x = rng.uniform(img.cols / 4, img.cols / 4 * 3);
+			p.y = rng.uniform(img.rows / 4, img.rows / 4 * 3);
+
+			points.push_back(p);
+		}
+
+		cvtColor(img, img, CV_GRAY2BGR);
+
+		for each (auto item in points)
+		{
+			circle(img, item, 1, Scalar(0, 0, 255));
+		}
+
+		///
+		Point2f rect[4];
+
+		fitEllipse(points).points(rect);
+
+		for (size_t i = 0; i < 4; i++)
+		{
+			line(img, rect[i], rect[(i + 1) % 4], Scalar(0, 255, 0), 1, LINE_AA);
+		}
+
+		imshow("", img);
 
 	});
 

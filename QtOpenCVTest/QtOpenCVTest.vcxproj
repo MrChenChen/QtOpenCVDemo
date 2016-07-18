@@ -60,8 +60,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>D:\Program Files\opencv\build\include;D:\Program Files\opencv\build\include\opencv;D:\Program Files\opencv\build\include\opencv2;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Program Files\opencv\build\x64\vc14\bin;D:\Program Files\opencv\build\x64\vc14\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Program Files\opencv3.1\include;D:\Program Files\opencv3.1\include\opencv;D:\Program Files\opencv3.1\include\opencv2;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Program Files\opencv3.1\x86\vc14\lib;D:\Program Files\opencv3.1\x86\vc14;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
@@ -70,8 +70,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>D:\Program Files\opencv\build\include;D:\Program Files\opencv\build\include\opencv;D:\Program Files\opencv\build\include\opencv2;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Program Files\opencv\build\x86\vc12\bin;D:\Program Files\opencv\build\x86\vc12\lib;D:\Program Files\opencv\build\x86\vc12\staticlib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Program Files\opencv3.1\include\opencv;D:\Program Files\opencv3.1\include\opencv2;D:\Program Files\opencv3.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Program Files\opencv3.1\x86\vc14\lib;D:\Program Files\opencv3.1\x86\vc14\staticlib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(FxCopDir);$(PATH);</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
@@ -86,6 +87,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,6 +105,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -119,13 +122,14 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;opencv_world300.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;opencv_world310.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,6 +140,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
