@@ -1189,8 +1189,6 @@ void MyWidget::InitConnections()
 
 	});
 
-#endif
-
 
 	AddButton("直方图", []
 	{
@@ -1250,7 +1248,7 @@ void MyWidget::InitConnections()
 
 		flip(dst, dst, 0);
 
-		imshow("R G B", dst);
+		cv::imshow("R G B", dst);
 
 	});
 
@@ -1285,5 +1283,88 @@ void MyWidget::InitConnections()
 		MessageBox(0, LPCWSTR(QString("%1").arg(r).unicode()), L"", 0);
 
 	});
+
+
+#endif
+
+
+	AddButton("Harris", []
+	{
+		Mat img = imread("1_0090_0.bmp", 0);
+
+		threshold(img, img, 200, 255, THRESH_BINARY_INV);
+
+		cv::imshow("Thre", img);
+
+		Mat dst;
+
+		cornerHarris(img, dst, 2, 3, 0.01);
+
+		cv::normalize(dst, dst, 0, 255, NORM_MINMAX, CV_32FC1);
+
+		//threshold(dst, dst, 0.00001, 255, THRESH_BINARY); //会呈现出明朗的线条
+
+		convertScaleAbs(dst, dst);   //将深度转化为 CV_8U 
+
+		cv::imshow("After", dst);
+
+	});
+
+
+	AddButton("Tomasi", []
+	{
+		Mat img = imread("D:\\white.bmp", 0);
+
+		threshold(img, img, 200, 255, THRESH_BINARY_INV);
+
+
+		vector<Point2f> corners;
+
+		goodFeaturesToTrack(img, corners, 300, 0.01, 10);
+
+
+		for (size_t i = 0; i < corners.size(); i++)
+		{
+			qDebug() << corners[i].x;
+
+			qDebug() << corners[i].y;
+
+			auto str = QString("%1").arg(corners[i].x) + " , " + QString("%1").arg(corners[i].y);
+
+			MessageBox(0, LPCWSTR(str.unicode()), L"像素点坐标", 0);
+		}
+
+
+		Size winSize = Size(5, 5);
+
+		Size zeroZone = Size(-1, -1);
+
+		auto criteria = TermCriteria(TermCriteria::EPS + TermCriteria::MAX_ITER, 40, 0.01);
+
+		cornerSubPix(img, corners, winSize, zeroZone, criteria);
+
+
+		qDebug() << "---------------------";
+
+		cv::cvtColor(img, img, CV_GRAY2BGR);
+
+		for (size_t i = 0; i < corners.size(); i++)
+		{
+			qDebug() << corners[i].x;
+
+			qDebug() << corners[i].y;
+
+			auto str = QString("%1").arg(corners[i].x) + " , " + QString("%1").arg(corners[i].y);
+
+			MessageBox(0, LPCWSTR(str.unicode()), L"亚像素点坐标", 0);
+
+			cv::circle(img, corners[0], 4, Scalar(0, 0, 255), 2);
+
+		}
+
+		cv::imshow("Result", img);
+
+	});
+
 
 }
