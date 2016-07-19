@@ -44,5 +44,6 @@
     <Image Include="D:\ts.bmp" />
     <Image Include="1_0090_0.bmp" />
     <Image Include="D:\test_img.bmp" />
+    <Image Include="chess.jpg" />
   </ItemGroup>
 </Project>

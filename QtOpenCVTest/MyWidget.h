@@ -12,6 +12,11 @@
 
 #include <vector>
 
+
+#include <features2d.hpp>
+#include "opencv2/features2d/features2d.hpp"  
+#include "opencv2/highgui/highgui.hpp"  
+
 using namespace cv;
 
 using namespace std;
