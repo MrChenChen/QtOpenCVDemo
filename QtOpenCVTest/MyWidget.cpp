@@ -1460,4 +1460,42 @@ void MyWidget::InitConnections()
 		return(0);
 	});
 
+
+	AddButton("PSNR", []
+	{
+		Mat src1 = imread("2-1-7.bmp");
+		Mat src2 = imread("2-2-7.bmp");
+
+		Mat diff;    // |src1 - src2|
+
+		absdiff(src1, src2, diff);
+
+		diff.convertTo(diff, CV_32F);
+
+		Scalar s = sum(diff);
+
+		double sse = s.val[0] + s.val[1] + s.val[2];
+
+		double psnr = 0;
+
+		if (sse > 1e-10)
+		{
+			double mse = sse / (double)(src1.channels()* src1.total());
+
+			psnr = 10.0 * log10((255 * 255) / mse);
+		}
+
+
+		//namedWindow("src1 - " + std::to_string(psnr), CV_WINDOW_NORMAL);
+		cv::imshow("src1 - " + std::to_string(psnr), src1);
+
+		//namedWindow("src2 - " + std::to_string(psnr), CV_WINDOW_NORMAL);
+		cv::imshow("src2 - " + std::to_string(psnr), src2);
+
+		MessageBox(0, ASM::stringToLPCWSTR(std::to_string(psnr)), L"PSNR", 0);
+
+	});
+
+
+
 }

@@ -105,6 +105,7 @@ namespace ASM {
 		return cv::Mat();
 	}
 
+
 	// If inPixmap exists for the lifetime of the resulting cv::Mat, pass false to inCloneImageData to share inPixmap's data
 	// with the cv::Mat directly
 	//    NOTE: Format_RGB888 is an exception since we need to use a local QImage and thus must clone the data regardless
@@ -114,5 +115,14 @@ namespace ASM {
 	}
 
 
+	static LPCWSTR stringToLPCWSTR(std::string orig)
+	{
+		size_t origsize = orig.length() + 1;
+		const size_t newsize = 100;
+		size_t convertedChars = 0;
+		wchar_t *wcstring = (wchar_t *)malloc(sizeof(wchar_t)*(orig.length() - 1));
+		mbstowcs_s(&convertedChars, wcstring, origsize, orig.c_str(), _TRUNCATE);
+		return wcstring;
+	}
 
 }
